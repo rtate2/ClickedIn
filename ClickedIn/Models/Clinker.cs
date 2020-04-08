@@ -35,7 +35,6 @@ namespace ClickedIn.Models
     public class Clinker
     {
         public int Id { get; set; }
-        public int InmateNumber { get; set; }
         public string HoodName { get; set; }
         public Services ServiceType { get; set; }
         public Interests Interests { get; set; }

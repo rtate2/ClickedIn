@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ClickedIn.DataAccess;
+using ClickedIn.Models;
 
 namespace ClickedIn.Controllers
 {
@@ -11,22 +13,36 @@ namespace ClickedIn.Controllers
     [ApiController]
     public class ClinkerController : ControllerBase
     {
+        ClinkerRepository _repository = new ClinkerRepository();
+
         [HttpPost]
         public IActionResult AddClinker(Clinker clinkerToAdd)
         {
-            return NotFound("In progress");
+            _repository.AddClinker(clinkerToAdd);
+
+            return Created("", clinkerToAdd);  
         }
 
-        [HttpGet("{Id}")]
+        [HttpGet("{Id}/id")]
         public IActionResult GetClinker(int Id)
         {
             return NotFound("In progress");
         }
 
-        [HttpGet("{Interest}")]
+        [HttpGet("{Interest}/interest")]
         public IActionResult GetClinkerByInterest(string Interest)
         {
-            return NotFound("In progress");
+             var testing = _repository.GetClinkerByInterest(Interest);
+
+            return NotFound(testing);
+        }
+
+        [HttpGet]
+        public IActionResult GetAllClinkers()
+        {
+            var allClinkers = _repository.GetClinkers();
+
+            return Ok(allClinkers);
         }
     }
 }
