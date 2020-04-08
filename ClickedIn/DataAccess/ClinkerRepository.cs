@@ -16,7 +16,7 @@ namespace ClickedIn.DataAccess
                 Id = 1,
                 HoodName = "June Bug",
                 ServiceType = Services.Cook,
-                Interests = Interests.Dominos
+                InterestType = Interests.Dominos
             }
         };
 
@@ -31,18 +31,21 @@ namespace ClickedIn.DataAccess
             return _clinkers;
         }
 
-        public List<Clinker> GetClinkerByInterest(string Interest)
+        public List<Clinker> GetClinkersByInterest(string interestString)
         {
-            Interests interest;
-            
-            if (Enum.TryParse(Interest, true, out interest))
+            Interests interestValue;
+
+            List<Clinker> emptyList = new List<Clinker>();
+
+            if (Enum.TryParse(interestString, true, out interestValue))
             {
-                if (Enum.IsDefined(typeof(Interests), interest) | interest.ToString().Contains(","))
+                //if (Enum.IsDefined(typeof(Interests), interest | interest.ToString().Contains(",")))
                 {
-                    var filteredClinkers = _clinkers.Where(clinker => clinker.Interests == interest);
+                    return _clinkers.Where(clinker => clinker.InterestType == interestValue).ToList(); // could be empty
                 }
+                //return emptyList;
             }
-            return "didn't work";
+            else return emptyList;
         }
     }
 }

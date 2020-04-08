@@ -37,6 +37,6 @@ namespace ClickedIn.Models
         public int Id { get; set; }
         public string HoodName { get; set; }
         public Services ServiceType { get; set; }
-        public Interests Interests { get; set; }
+        public Interests InterestType { get; set; }
     }
 }

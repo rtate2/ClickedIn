@@ -24,15 +24,15 @@ namespace ClickedIn.Controllers
         }
 
         [HttpGet("{Id}/id")]
-        public IActionResult GetClinker(int Id)
+        public IActionResult GetClinker(int id)
         {
             return NotFound("In progress");
         }
 
         [HttpGet("{Interest}/interest")]
-        public IActionResult GetClinkerByInterest(string Interest)
+        public IActionResult GetClinkerByInterest(string interestString)
         {
-             var testing = _repository.GetClinkerByInterest(Interest);
+             var testing = _repository.GetClinkersByInterest(interestString);
 
             return NotFound(testing);
         }
