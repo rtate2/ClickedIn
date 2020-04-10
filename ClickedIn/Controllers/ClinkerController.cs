@@ -24,9 +24,10 @@ namespace ClickedIn.Controllers
         }
 
         [HttpGet("{Id}/id")]
-        public IActionResult GetClinker(int id)
+        public IActionResult GetClinkerById(int id)
         {
-            return NotFound("In progress");
+            var result = _repository.GetClinkerById(id);
+            return Ok(result);
         }
 
         [HttpGet("{interestString}/interest")]
@@ -61,18 +62,18 @@ namespace ClickedIn.Controllers
             return Ok(allClinkers);
         }
 
-        [HttpPost("homie/{homieToAdd}")]
-        public IActionResult AddHomie(Clinker homieToAdd)
+        [HttpPost("clinker/{clinkerId}/homie/{homieId}")]
+        public IActionResult AddHomie(int clinkerId, int homieId)
         {
-            var allHomies = _repository.AddHomies(homieToAdd);
-            return Ok(allHomies);
+            var clinker = _repository.AddHomies(clinkerId, homieId);
+            return Ok(clinker);
         }
 
-        [HttpPost("enemy/{enemyToAdd}")]
-        public IActionResult AddEnemy(Clinker enemyToAdd)
+        [HttpPost("clinker/{clinkerId}/enemy/{enemyId}")]
+        public IActionResult AddEnemy(int clinkerId, int enemyId)
         {
-            var allEnemies = _repository.AddEnemy(enemyToAdd);
-            return Ok(allEnemies);
+            var clinker = _repository.AddEnemy(clinkerId, enemyId);
+            return Ok(clinker);
         }
     }
 }

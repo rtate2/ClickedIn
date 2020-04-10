@@ -26,7 +26,47 @@ namespace ClickedIn.DataAccess
                     {
                         Name = "Basketball"
                     }
-                }
+                },
+                Homies = new List<Clinker>(),
+                Enemies = new List<Clinker>()
+            },
+            new Clinker
+            {
+                Id = 2,
+                HoodName = "Lil Ray",
+                ServiceType = Services.Snitch,
+                Interests = new List<Interest>()
+                {
+                    new Interest
+                    {
+                        Name = "Cooking"
+                    },
+                    new Interest
+                    {
+                        Name = "Basketball"
+                    }
+                },
+                Homies = new List<Clinker>(),
+                Enemies = new List<Clinker>()
+            },
+            new Clinker
+            {
+                Id = 3,
+                HoodName = "Lil Randy",
+                ServiceType = Services.Negotiator,
+                Interests = new List<Interest>()
+                {
+                    new Interest
+                    {
+                        Name = "Sleeping"
+                    },
+                    new Interest
+                    {
+                        Name = "Cooking"
+                    }
+                },
+                Homies = new List<Clinker>(),
+                Enemies = new List<Clinker>()
             }
         };
 
@@ -70,18 +110,26 @@ namespace ClickedIn.DataAccess
             else return emptyList;
         }
 
-        public List<Clinker> AddHomies(Clinker homieToAdd)
+        public Clinker GetClinkerById (int clinkerId)
         {
-            List<Clinker> homies = new List<Clinker>();
-            homies.Add(homieToAdd);
-            return homies;
+            var clinker = _clinkers.FirstOrDefault(clinker => clinker.Id == clinkerId);
+            return clinker;
         }
 
-        public List<Clinker> AddEnemy(Clinker enemyToAdd)
+        public Clinker AddHomies(int clinkerId, int homieId)
         {
-            List<Clinker> enemies = new List<Clinker>();
-            enemies.Add(enemyToAdd);
-            return enemies;
+            var clinker = GetClinkerById(clinkerId);
+            var homie = GetClinkerById(homieId);
+            clinker.Homies.Add(homie);
+            return clinker;
+        }
+
+        public Clinker AddEnemy(int clinkerId, int enemyId)
+        {
+            var clinker = GetClinkerById(clinkerId);
+            var enemy = GetClinkerById(enemyId);
+            clinker.Enemies.Add(enemy);
+            return clinker;
         }
     }
 }
