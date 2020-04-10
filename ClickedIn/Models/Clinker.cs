@@ -18,25 +18,17 @@ namespace ClickedIn.Models
         Negotiator
     }
 
-    public enum Interests
+    public class Interest
     {
-        WeightLifting,
-        Basketball,
-        Dominos,
-        Library,
-        Fighting,
-        Writing,
-        Gambling,
-        Cards,
-        StoryTelling,
-        Spitting,
-        Confinement
+        public string Name { get; set; }
     }
     public class Clinker
     {
         public int Id { get; set; }
         public string HoodName { get; set; }
         public Services ServiceType { get; set; }
-        public Interests InterestType { get; set; }
+        public List<Interest> Interests { get; set; }
+        public List<Clinker> Homies { get; set; }
+        public List<Clinker> Enemies { get; set; }
     }
 }

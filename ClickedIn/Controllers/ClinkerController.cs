@@ -29,12 +29,28 @@ namespace ClickedIn.Controllers
             return NotFound("In progress");
         }
 
-        [HttpGet("{Interest}/interest")]
-        public IActionResult GetClinkerByInterest(string interestString)
+        [HttpGet("{interestString}/interest")]
+        public IActionResult GetClinkersByInterest(string interestString)
         {
-             var testing = _repository.GetClinkersByInterest(interestString);
+             var result = _repository.GetClinkersByInterest(interestString);
 
-            return NotFound(testing);
+            if (result.Count > 0)
+            {
+                return Ok(result);
+            }
+            return NotFound("There are no clinkers with this interest.");
+        }
+
+        [HttpGet("{serviceString}/service")]
+        public IActionResult GetClinkersByServices(string serviceString)
+        {
+            var result = _repository.GetClinkersByServices(serviceString);
+
+            if (result.Count > 0)
+            {
+                return Ok(result);
+            }
+            return NotFound("There are no clinkers with the requested service.");
         }
 
         [HttpGet]
@@ -43,6 +59,20 @@ namespace ClickedIn.Controllers
             var allClinkers = _repository.GetClinkers();
 
             return Ok(allClinkers);
+        }
+
+        [HttpPost("homie/{homieToAdd}")]
+        public IActionResult AddHomie(Clinker homieToAdd)
+        {
+            var allHomies = _repository.AddHomies(homieToAdd);
+            return Ok(allHomies);
+        }
+
+        [HttpPost("enemy/{enemyToAdd}")]
+        public IActionResult AddEnemy(Clinker enemyToAdd)
+        {
+            var allEnemies = _repository.AddEnemy(enemyToAdd);
+            return Ok(allEnemies);
         }
     }
 }
