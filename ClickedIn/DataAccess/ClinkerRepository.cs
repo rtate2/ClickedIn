@@ -16,9 +16,20 @@ namespace ClickedIn.DataAccess
                 Id = 1,
                 HoodName = "June Bug",
                 ServiceType = Services.Cook,
-                Interests = Interests.Dominos
+                Interests = new List<Interest>()
+                {
+                    new Interest
+                    {
+                        Name = "Dominos"
+                    },
+                    new Interest
+                    {
+                        Name = "Basketball"
+                    }
+                }
             }
         };
+
 
         public void AddClinker(Clinker clinker)
         {
@@ -31,18 +42,46 @@ namespace ClickedIn.DataAccess
             return _clinkers;
         }
 
-        public List<Clinker> GetClinkerByInterest(string Interest)
+        public List<Clinker> GetClinkersByInterest(string interestString)
         {
-            Interests interest;
-            
-            if (Enum.TryParse(Interest, true, out interest))
+            List<Clinker> filteredList = new List<Clinker>();
+
+            foreach (var clinker in _clinkers)
             {
-                if (Enum.IsDefined(typeof(Interests), interest) | interest.ToString().Contains(","))
+                var hasRelatedInterests = clinker.Interests.Any(interest => interest.Name == interestString);
+                if (hasRelatedInterests)
                 {
-                    var filteredClinkers = _clinkers.Where(clinker => clinker.Interests == interest);
+                    filteredList.Add(clinker);
                 }
             }
-            return "didn't work";
+            return filteredList;
+        }
+
+        public List<Clinker> GetClinkersByServices(string serviceString)
+        {
+            Services serviceValue; 
+
+            List<Clinker> emptyList = new List<Clinker>();
+
+            if (Enum.TryParse(serviceString, true, out serviceValue))
+            {
+                return _clinkers.Where(clinker => clinker.ServiceType == serviceValue).ToList(); // could be empty
+            }
+            else return emptyList;
+        }
+
+        public List<Clinker> AddHomies(Clinker homieToAdd)
+        {
+            List<Clinker> homies = new List<Clinker>();
+            homies.Add(homieToAdd);
+            return homies;
+        }
+
+        public List<Clinker> AddEnemy(Clinker enemyToAdd)
+        {
+            List<Clinker> enemies = new List<Clinker>();
+            enemies.Add(enemyToAdd);
+            return enemies;
         }
     }
 }
