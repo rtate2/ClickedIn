@@ -20,6 +20,8 @@ namespace ClickedIn.DataAccess
             }
         };
 
+        static List<Clinker> _clinkerInterests = new List<Clinker>();
+
         public void AddClinker(Clinker clinker)
         {
             clinker.Id = _clinkers.Max(x => x.Id) + 1;
@@ -34,15 +36,20 @@ namespace ClickedIn.DataAccess
         public List<Clinker> GetClinkerByInterest(string Interest)
         {
             Interests interest;
-            
+
             if (Enum.TryParse(Interest, true, out interest))
             {
                 if (Enum.IsDefined(typeof(Interests), interest) | interest.ToString().Contains(","))
                 {
                     var filteredClinkers = _clinkers.Where(clinker => clinker.Interests == interest);
+                    foreach (var filteredClinker in filteredClinkers)
+                    {
+                        _clinkerInterests.Add(filteredClinker);
+                        return _clinkerInterests;
+                    }
                 }
             }
-            return "didn't work";
+            return _clinkerInterests;
         }
     }
 }
