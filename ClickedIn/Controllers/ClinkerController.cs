@@ -75,5 +75,19 @@ namespace ClickedIn.Controllers
             var clinker = _repository.AddEnemy(clinkerId, enemyId);
             return Ok(clinker);
         }
+
+        [HttpPut("{clinkerId}/id/{clinkerInterest}/{AddOrRemove}")]
+        public IActionResult UpdateInterests(int clinkerId, string clinkerInterest, string AddOrRemove)
+        {
+            var clinker = _repository.UpdateInterests(clinkerId, clinkerInterest, AddOrRemove);
+            return Ok(clinker);
+        }
+
+        [HttpPut("{clinkerId}/id/{clinkerService}")]
+        public IActionResult UpdateService(int clinkerId, string clinkerService)
+        {
+            var clinker = _repository.UpdateService(clinkerId, clinkerService);
+            return Ok(clinker);
+        }
     }
 }
