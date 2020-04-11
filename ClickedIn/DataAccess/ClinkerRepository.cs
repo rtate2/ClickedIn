@@ -130,5 +130,40 @@ namespace ClickedIn.DataAccess
             clinker.Enemies.Add(enemy);
             return clinker;
         }
+
+        public Clinker UpdateInterests(int clinkerId, string clinkerInterest, string AddOrRemove)
+        {
+            Interest i = new Interest
+            {
+                Name = clinkerInterest
+            };
+            var clinker = GetClinkerById(clinkerId);
+            if (AddOrRemove.ToLower() == "add")
+            {
+                clinker.Interests.Add(i);
+                return clinker;
+            }
+            else if (AddOrRemove.ToLower() == "remove")
+            {
+                var foundInterest = clinker.Interests.Find(interest => interest.Name == clinkerInterest);
+                clinker.Interests.Remove(foundInterest);
+                return clinker;
+            }
+            return clinker;
+        }
+
+        public Clinker UpdateService(int clinkerId, string clinkerService)
+        {
+            Services serviceValue;
+
+            var clinker = GetClinkerById(clinkerId);
+
+            if (Enum.TryParse(clinkerService, true, out serviceValue))
+            {
+                clinker.ServiceType = serviceValue;
+                return clinker;
+            }
+            return clinker;
+        }
     }
 }
