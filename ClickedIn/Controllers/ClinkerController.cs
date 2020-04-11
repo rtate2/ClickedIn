@@ -89,5 +89,12 @@ namespace ClickedIn.Controllers
             var clinker = _repository.UpdateService(clinkerId, clinkerService);
             return Ok(clinker);
         }
+        
+        [HttpGet(("{Id}/remainingDays"))]
+        public IActionResult RemainingDays(int Id)
+        {
+            var clinker = _repository.RemainingSentence(Id);
+            return Ok(clinker);
+        }
     }
 }
