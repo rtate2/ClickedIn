@@ -30,5 +30,6 @@ namespace ClickedIn.Models
         public List<Interest> Interests { get; set; }
         public List<Clinker> Homies { get; set; }
         public List<Clinker> Enemies { get; set; }
+        public DateTime ReleaseDate { get; set; }
     }
 }

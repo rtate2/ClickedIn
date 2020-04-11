@@ -28,7 +28,8 @@ namespace ClickedIn.DataAccess
                     }
                 },
                 Homies = new List<Clinker>(),
-                Enemies = new List<Clinker>()
+                Enemies = new List<Clinker>(),
+                ReleaseDate = new DateTime(2020,12,10)
             },
             new Clinker
             {
@@ -47,7 +48,8 @@ namespace ClickedIn.DataAccess
                     }
                 },
                 Homies = new List<Clinker>(),
-                Enemies = new List<Clinker>()
+                Enemies = new List<Clinker>(),
+                ReleaseDate = new DateTime(2022,1,5)
             },
             new Clinker
             {
@@ -66,7 +68,48 @@ namespace ClickedIn.DataAccess
                     }
                 },
                 Homies = new List<Clinker>(),
-                Enemies = new List<Clinker>()
+                Enemies = new List<Clinker>(),
+                ReleaseDate = new DateTime(2042,12,31)
+            },
+             new Clinker
+            {
+                Id = 4,
+                HoodName = "Lil Kel",
+                ServiceType = Services.Thief,
+                Interests = new List<Interest>()
+                {
+                    new Interest
+                    {
+                        Name = "Sleeping"
+                    },
+                    new Interest
+                    {
+                        Name = "Sneaking"
+                    }
+                },
+                Homies = new List<Clinker>(),
+                Enemies = new List<Clinker>(),
+                ReleaseDate = new DateTime(2020,8,7)
+            },
+              new Clinker
+            {
+                Id = 1,
+                HoodName = "Lil Mo",
+                ServiceType = Services.Snitch,
+                Interests = new List<Interest>()
+                {
+                    new Interest
+                    {
+                        Name = "Eating"
+                    },
+                    new Interest
+                    {
+                        Name = "Money"
+                    }
+                },
+                Homies = new List<Clinker>(),
+                Enemies = new List<Clinker>(),
+                ReleaseDate = new DateTime(2020,4,24)
             }
         };
 
@@ -164,6 +207,15 @@ namespace ClickedIn.DataAccess
                 return clinker;
             }
             return clinker;
+        }
+
+        public int RemainingSentence(int clinkerId)
+        {
+            var clinker = GetClinkerById(clinkerId);
+            var clinkerReleaseDate = clinker.ReleaseDate;
+            DateTime today = DateTime.Today;
+            var daysRemaining = (clinkerReleaseDate - today).Days;
+            return daysRemaining;
         }
     }
 }
