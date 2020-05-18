@@ -30,7 +30,7 @@ namespace ClickedIn.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{interestString}/interest")]
+        [HttpGet("interestAndService/{interestString}")]
         public IActionResult GetClinkersByInterest(string interestString)
         {
              var result = _repository.GetClinkersByInterest(interestString);

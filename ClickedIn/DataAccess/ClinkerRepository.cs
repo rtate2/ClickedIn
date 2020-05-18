@@ -125,7 +125,6 @@ namespace ClickedIn.DataAccess
 
         public List<Clinker> GetClinkers()
         {
-            //return _clinkers;
             var sql = @"select HoodName
                         from Clinker";
 
@@ -137,13 +136,19 @@ namespace ClickedIn.DataAccess
 
         public List<ClinkersWithInterestsAndService> GetClinkersWithInterestsAndService()
         {
-            var sql = @"select Clinker.HoodName, [Service].[Type] as [Service], [Service].ClinkerId
-                        from Service
+            var sql = @"select Clinker.HoodName, [Service].[Type] as [Service], ClinkerService.ClinkerId
+                        from ClinkerService
 	                        join Clinker
-		                        on Service.ClinkerId = Clinker.Id";
+		                        on ClinkerService.ClinkerId = Clinker.Id
+	                        join [Service]
+		                        on ClinkerService.ServiceId = [Service].Id";
 
-            var interestSql = @"select [Type] as InterestType, Interest.ClinkerId
-                                from Interest";
+            var interestSql = @"select ClinkerInterest.ClinkerId, Interest.[Type] as InterestType
+                                from ClinkerInterest
+	                                join Clinker
+		                                on ClinkerInterest.ClinkerId = Clinker.Id
+	                                join Interest
+		                                on ClinkerInterest.InterestId = Interest.Id";
 
             using (var db = new SqlConnection(ConnectionString))
             {
@@ -159,19 +164,45 @@ namespace ClickedIn.DataAccess
             }
         }
 
-        public List<Clinker> GetClinkersByInterest(string interestString)
+        public List<ClinkersWithInterestsAndService> GetClinkersByInterest(string interestString)
         {
-            List<Clinker> filteredList = new List<Clinker>();
+            //List<Clinker> filteredList = new List<Clinker>();
 
-            foreach (var clinker in _clinkers)
+            //foreach (var clinker in _clinkers)
+            //{
+            //    var hasRelatedInterests = clinker.Interests.Any(interest => interest.Name == interestString);
+            //    if (hasRelatedInterests)
+            //    {
+            //        filteredList.Add(clinker);
+            //    }
+            //}
+            //return filteredList;
+            var sql = @"select Clinker.HoodName, [Service].[Type] as [Service], ClinkerService.ClinkerId
+                        from ClinkerService
+	                        join Clinker
+		                        on ClinkerService.ClinkerId = Clinker.Id
+	                        join [Service]
+		                        on ClinkerService.ServiceId = [Service].Id";
+
+            var interestSql = @"select ClinkerInterest.ClinkerId, Interest.[Type] as InterestType
+                                from ClinkerInterest
+	                                join Clinker
+		                                on ClinkerInterest.ClinkerId = Clinker.Id
+	                                join Interest
+		                                on ClinkerInterest.InterestId = Interest.Id";
+
+            using (var db = new SqlConnection(ConnectionString))
             {
-                var hasRelatedInterests = clinker.Interests.Any(interest => interest.Name == interestString);
-                if (hasRelatedInterests)
-                {
-                    filteredList.Add(clinker);
+                var results = db.Query<ClinkersWithInterestsAndService>(sql).ToList();
+                var interests = db.Query<Interest>(interestSql, new { InterestString = interestString}).ToList();
+
+                foreach (var clinker in results)
+                {                    
+                    clinker.Interests = interests.Where(i => i.ClinkerId == clinker.ClinkerId).Select(i => i.InterestType).ToList();
                 }
+
+                return results;
             }
-            return filteredList;
         }
 
         public List<Clinker> GetClinkersByServices(string serviceString)

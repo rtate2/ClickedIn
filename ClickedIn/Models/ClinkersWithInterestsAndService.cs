@@ -9,8 +9,6 @@ namespace ClickedIn.Models
     {
         public int ClinkerId { get; set; }
         public string HoodName { get; set; }
-        public int InterestClinkerId { get; set; }
-        public int ServiceClinkerId { get; set; }
         public List<string> Interests { get; set; }
         public string Service { get; set; }
     }
