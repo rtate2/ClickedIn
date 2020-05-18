@@ -62,6 +62,13 @@ namespace ClickedIn.Controllers
             return Ok(allClinkers);
         }
 
+        [HttpGet("interestAndService")]
+        public IActionResult GetClinkersWithInterestsAndService()
+        {
+            var allClinkers = _repository.GetClinkersWithInterestsAndService();
+            return Ok(allClinkers);
+        }
+
         [HttpPost("clinker/{clinkerId}/homie/{homieId}")]
         public IActionResult AddHomie(int clinkerId, int homieId)
         {

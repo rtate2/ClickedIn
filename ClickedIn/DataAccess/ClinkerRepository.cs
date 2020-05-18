@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ClickedIn.Models;
+using Dapper;
+using Microsoft.Data.SqlClient;
 
 
 namespace ClickedIn.DataAccess
 {
     public class ClinkerRepository
     {
+        const string ConnectionString = "Server=localhost;Database=ClinkedIn;Trusted_Connection=True;";
+
         static List<Clinker> _clinkers = new List<Clinker>()
         {
             new Clinker
@@ -16,13 +20,13 @@ namespace ClickedIn.DataAccess
                 Id = 1,
                 HoodName = "June Bug",
                 ServiceType = Services.Cook,
-                Interests = new List<Interest>()
+                Interests = new List<Interests>()
                 {
-                    new Interest
+                    new Interests
                     {
                         Name = "Dominos"
                     },
-                    new Interest
+                    new Interests
                     {
                         Name = "Basketball"
                     }
@@ -36,13 +40,13 @@ namespace ClickedIn.DataAccess
                 Id = 2,
                 HoodName = "Lil Ray",
                 ServiceType = Services.Snitch,
-                Interests = new List<Interest>()
+                Interests = new List<Interests>()
                 {
-                    new Interest
+                    new Interests
                     {
                         Name = "Cooking"
                     },
-                    new Interest
+                    new Interests
                     {
                         Name = "Basketball"
                     }
@@ -56,13 +60,13 @@ namespace ClickedIn.DataAccess
                 Id = 3,
                 HoodName = "Lil Randy",
                 ServiceType = Services.Negotiator,
-                Interests = new List<Interest>()
+                Interests = new List<Interests>()
                 {
-                    new Interest
+                    new Interests
                     {
                         Name = "Sleeping"
                     },
-                    new Interest
+                    new Interests
                     {
                         Name = "Cooking"
                     }
@@ -76,13 +80,13 @@ namespace ClickedIn.DataAccess
                 Id = 4,
                 HoodName = "Lil Kel",
                 ServiceType = Services.Thief,
-                Interests = new List<Interest>()
+                Interests = new List<Interests>()
                 {
-                    new Interest
+                    new Interests
                     {
                         Name = "Sleeping"
                     },
-                    new Interest
+                    new Interests
                     {
                         Name = "Sneaking"
                     }
@@ -93,16 +97,16 @@ namespace ClickedIn.DataAccess
             },
               new Clinker
             {
-                Id = 1,
+                Id = 5,
                 HoodName = "Lil Mo",
                 ServiceType = Services.Snitch,
-                Interests = new List<Interest>()
+                Interests = new List<Interests>()
                 {
-                    new Interest
+                    new Interests
                     {
                         Name = "Eating"
                     },
-                    new Interest
+                    new Interests
                     {
                         Name = "Money"
                     }
@@ -121,7 +125,38 @@ namespace ClickedIn.DataAccess
 
         public List<Clinker> GetClinkers()
         {
-            return _clinkers;
+            //return _clinkers;
+            var sql = @"select HoodName
+                        from Clinker";
+
+            using (var db = new SqlConnection(ConnectionString)) 
+            {
+                return db.Query<Clinker>(sql).ToList();
+            }
+        }
+
+        public List<ClinkersWithInterestsAndService> GetClinkersWithInterestsAndService()
+        {
+            var sql = @"select Clinker.HoodName, [Service].[Type] as [Service], [Service].ClinkerId
+                        from Service
+	                        join Clinker
+		                        on Service.ClinkerId = Clinker.Id";
+
+            var interestSql = @"select [Type] as InterestType, Interest.ClinkerId
+                                from Interest";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var results = db.Query<ClinkersWithInterestsAndService>(sql).ToList();
+                var interests = db.Query<Interest>(interestSql).ToList();
+
+                foreach (var result in results)
+                {
+                    result.Interests = interests.Where(i => i.ClinkerId == result.ClinkerId).Select(i => i.InterestType).ToList();
+                }
+
+                return results;
+            }
         }
 
         public List<Clinker> GetClinkersByInterest(string interestString)
@@ -176,7 +211,7 @@ namespace ClickedIn.DataAccess
 
         public Clinker UpdateInterests(int clinkerId, string clinkerInterest, string AddOrRemove)
         {
-            Interest i = new Interest
+            Interests i = new Interests
             {
                 Name = clinkerInterest
             };
