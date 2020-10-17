@@ -30,7 +30,7 @@ namespace ClickedIn.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{interestString}/interest")]
+        [HttpGet("interestAndService/{interestString}")]
         public IActionResult GetClinkersByInterest(string interestString)
         {
              var result = _repository.GetClinkersByInterest(interestString);
@@ -59,6 +59,13 @@ namespace ClickedIn.Controllers
         {
             var allClinkers = _repository.GetClinkers();
 
+            return Ok(allClinkers);
+        }
+
+        [HttpGet("interestAndService")]
+        public IActionResult GetClinkersWithInterestsAndService()
+        {
+            var allClinkers = _repository.GetClinkersWithInterestsAndService();
             return Ok(allClinkers);
         }
 
